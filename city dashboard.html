@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>City Dashboard</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #1f2937;
+      color: #f9fafb;
+      height: 100vh;
+      padding: 20px 10px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #10b981;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d1d5db;
+      padding: 10px 14px;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: #374151;
+      color: #fff;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 240px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .dashboard {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* User Welcome Card */
+    .welcome-card {
+      background: #ecfdf5;
+      border-left: 6px solid #5c6764;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .welcome-card h4 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #000000;
+    }
+
+    .welcome-card p {
+      margin: 4px 0 0 0;
+      font-size: 14px;
+      color: #000000;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 16px;
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status.good { background:#dcfce7; color:#16a34a; }
+    .status.moderate { background:#fef9c3; color:#ca8a04; }
+    .status.poor { background:#fee2e2; color:#dc2626; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .info-box { border-radius: 8px; padding: 16px; }
+    .blue-box { background: #eff6ff; color:#1e3a8a; }
+    .green-box { background: #ecfdf5; color:#065f46; }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge.red { background:#fee2e2; color:#dc2626; }
+    .badge.yellow { background:#fef9c3; color:#ca8a04; }
+    .badge.green { background:#dcfce7; color:#16a34a; }
+
+    .alerts div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.green { background:#16a34a; }
+    .dot.blue { background:#2563eb; }
+    .dot.yellow { background:#ca8a04; }
+
+    .traffic-item:hover { background: rgba(0,0,0,0.05); cursor: pointer; }
+    .alerts div:hover { background: rgba(0,0,0,0.05); border-radius: 6px; cursor: pointer; }
+
+    /* Power/Water Cut Section (Professional Warning) */
+    .cut-section {
+      margin-bottom: 32px;
+    }
+    .cut-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #b91c1c;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .cut-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 16px;
+    }
+    .cut-item {
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: #fff;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .cut-item:hover { transform: translateY(-2px); }
+    .cut-power { background: #dc2626; } /* red */
+    .cut-water { background: #2563eb; } /* blue */
+    .cut-item span { font-size: 14px; }
+    .cut-item .area { font-size: 16px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+
+ <div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+  <!-- Main Content -->
+  <div class="main">
+    <div class="dashboard">
+      <div class="header">
+        <div class="welcome-card" id="welcomeCard">
+          <h4 id="welcomeMessage">Hello!</h4>
+          <p id="welcomeHint">Here's a quick overview of your city dashboard.</p>
+        </div>
+        <div id="lastUpdated" style="font-size: 14px; color:#6b7280;">Last updated: --:--:--</div>
+      </div>
+
+      <div class="metrics" id="metrics"></div>
+
+      <!-- Power/Water Cut Notifications (Moved Up) -->
+      <div class="cut-section">
+        <h3><i data-lucide="alert-triangle"></i> Power & Water Cut Alerts</h3>
+        <div class="cut-list" id="cutList"></div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Traffic Hotspots -->
+        <div class="info-box blue-box">
+          <h4>Traffic Hotspots</h4>
+          <div class="traffic-list">
+            <div class="traffic-item">
+              <span>Main St & 5th Ave</span>
+              <span class="badge red">Heavy</span>
+            </div>
+            <div class="traffic-item">
+              <span>Downtown Bridge</span>
+              <span class="badge yellow">Moderate</span>
+            </div>
+            <div class="traffic-item">
+              <span>Park Avenue</span>
+              <span class="badge green">Light</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Environmental Alerts -->
+        <div class="info-box green-box">
+          <h4>Environmental Alerts</h4>
+          <div class="alerts">
+            <div style="background:#dcfce7;">
+              <i data-lucide="wind" style="color:#16a34a;"></i>
+              <span>Air quality improving in downtown area</span>
+            </div>
+            <div style="background:#dbeafe;">
+              <i data-lucide="droplets" style="color:#2563eb;"></i>
+              <span>Water quality stable across all districts</span>
+            </div>
+            <div style="background:#fef9c3;">
+              <i data-lucide="volume" style="color:#ca8a04;"></i>
+              <span>Noise levels elevated near construction zones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const metricsData = {
+      airQuality: { value: 42, unit: 'AQI', status: 'good', trend: 'stable', title:'Air Quality', icon:'wind', description:'Real-time air quality index' },
+      noiseLevel: { value: 55, unit: 'dB', status: 'moderate', trend: 'down', title:'Noise Level', icon:'thermometer', description:'Average city noise levels' },
+      waterQuality: { value: 8.2, unit: 'pH', status: 'good', trend: 'stable', title:'Water Quality', icon:'droplets', description:'Municipal water pH levels' },
+      trafficFlow: { value: 73, unit: '%', status: 'moderate', trend: 'up', title:'Traffic Flow', icon:'car', description:'Current traffic congestion' },
+      energyUsage: { value: 2.4, unit: 'MW', status: 'good', trend: 'down', title:'Energy Usage', icon:'zap', description:'City-wide energy consumption' },
+      connectivity: { value: 94, unit: '%', status: 'good', trend: 'up', title:'Network Coverage', icon:'wifi', description:'Public WiFi availability' }
+    };
+
+    const trendIcons = { up: "↗️", down: "↘️", stable: "➡️" };
+
+    function renderMetrics() {
+      const container = document.getElementById("metrics");
+      container.innerHTML = "";
+      for (const key in metricsData) {
+        const m = metricsData[key];
+        container.innerHTML += `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i data-lucide="${m.icon}"></i>
+                ${m.title}
+              </div>
+              <span>${trendIcons[m.trend]}</span>
+            </div>
+            <div>
+              <span style="font-size:20px; font-weight:bold;">${m.value.toFixed(1)}</span>
+              <span style="font-size:14px; color:#6b7280;">${m.unit}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status ${m.status}">${m.status}</span>
+              <p style="font-size:12px; color:#6b7280;">${m.description}</p>
+            </div>
+          </div>`;
+      }
+      lucide.createIcons(); 
+      document.getElementById("lastUpdated").textContent = "Last updated: " + new Date().toLocaleTimeString();
+    }
+
+    function updateMetrics() {
+      metricsData.airQuality.value = Math.max(20, Math.min(100, metricsData.airQuality.value + (Math.random() - 0.5) * 5));
+      metricsData.trafficFlow.value = Math.max(30, Math.min(100, metricsData.trafficFlow.value + (Math.random() - 0.5) * 10));
+      renderMetrics();
+    }
+
+    // User welcome
+    const userName = "Thisara";
+    function showWelcomeMessage() {
+      const welcomeEl = document.getElementById("welcomeMessage");
+      const hours = new Date().getHours();
+      let greeting = "Hello";
+
+      if(hours < 12) greeting = "Good morning";
+      else if(hours < 18) greeting = "Good afternoon";
+      else greeting = "Good evening";
+
+      welcomeEl.textContent = `${greeting}, ${userName}!`;
+    }
+
+    // Power/Water cut notifications
+    const cuts = [
+      { type: "Power", area: "Downtown", date: "2025-09-12", start: "10:00", end: "14:00" },
+      { type: "Water", area: "North District", date: "2025-09-12", start: "09:00", end: "12:00" },
+      { type: "Power", area: "East Side", date: "2025-09-13", start: "13:00", end: "17:00" }
+    ];
+
+    function renderCuts() {
+      const container = document.getElementById("cutList");
+      container.innerHTML = "";
+      cuts.forEach(cut => {
+        const cutClass = cut.type === "Power" ? "cut-power" : "cut-water";
+        container.innerHTML += `
+          <div class="cut-item ${cutClass}">
+            <span class="area">${cut.area} (${cut.type} Cut)</span>
+            <span>Date: ${cut.date}</span>
+            <span>Time: ${cut.start} - ${cut.end}</span>
+          </div>`;
+      });
+    }
+
+    renderMetrics();
+    showWelcomeMessage();
+    renderCuts();
+    setInterval(updateMetrics, 5000);
+  </script>
+</body>
+</html>

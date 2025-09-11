@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sustainability Tracker</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f3f4f6;
+    display:flex;
+    color:#111827;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width:220px;
+    background:#1f2937;
+    color:#f9fafb;
+    height:100vh;
+    padding:20px 10px;
+    position:fixed;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .sidebar h2 {
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    color:#10b981;
+    margin-bottom:20px;
+  }
+  .sidebar a {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#d1d5db;
+    padding:10px 14px;
+    text-decoration:none;
+    border-radius:8px;
+    transition: background 0.3s;
+  }
+  .sidebar a:hover {
+    background:#374151;
+    color:#fff;
+  }
+
+  /* Main content */
+  .main {
+    margin-left:240px;
+    padding:20px;
+    flex:1;
+  }
+
+  .dashboard {
+    background:white;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    max-width:1200px;
+    margin:auto;
+  }
+
+  h3{ font-size:22px; font-weight:bold; margin-bottom:16px; }
+  h4{ font-size:18px; font-weight:bold; margin-bottom:12px; }
+  .grid{ display:grid; gap:16px; }
+  .grid-cols-2{ grid-template-columns:repeat(2,1fr); }
+  .grid-cols-4{ grid-template-columns:repeat(4,1fr); }
+  .bg-gray-50{ background:#f9fafb; }
+  .rounded-lg{ border-radius:12px; }
+  .rounded-2xl{ border-radius:16px; }
+  .p-4{ padding:16px; }
+  .p-6{ padding:24px; }
+  .mb-4{ margin-bottom:16px; }
+  .mb-8{ margin-bottom:32px; }
+  .mb-6{ margin-bottom:24px; }
+  .font-bold{ font-weight:bold; }
+  .font-semibold{ font-weight:600; }
+  .text-gray-900{ color:#111827; }
+  .text-gray-500{ color:#6b7280; }
+  .text-green-600{ color:#16a34a; }
+  .text-blue-600{ color:#2563eb; }
+  .bg-green-100{ background:#d1fae5; }
+  .bg-blue-100{ background:#dbeafe; }
+  .bg-green-500{ background:#16a34a; }
+  .bg-blue-500{ background:#2563eb; }
+  .bg-yellow-500{ background:#facc15; }
+  .bg-gray-200{ background:#e5e7eb; }
+  .h-2{ height:8px; }
+  .rounded-full{ border-radius:9999px; }
+  .transition-all{ transition: all 0.5s; }
+  .hover\:shadow-md:hover{ box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+  .text-sm{ font-size:12px; }
+  .text-lg{ font-size:16px; }
+  .w-full{ width:100%; }
+  .py-2{ padding-top:8px; padding-bottom:8px; }
+  .px-2{ padding-left:8px; padding-right:8px; }
+  .space-y-2>* + *{ margin-top:8px; }
+  .space-y-3>* + *{ margin-top:12px; }
+  .space-y-4>* + *{ margin-top:16px; }
+  .flex{ display:flex; }
+  .justify-between{ justify-content:space-between; }
+  .justify-end{ justify-content:flex-end; }
+  .items-center{ align-items:center; }
+  .text-right{ text-align:right; }
+  .bg-gradient-to-r{ background: linear-gradient(to right,#d1fae5,#dbeafe); }
+  button{
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .profile-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #10b981;
+  }
+
+  /* Modal */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+  .modal-content {
+    background:white;
+    padding:24px;
+    border-radius:16px;
+    width:90%;
+    max-width:400px;
+    text-align:center;
+  }
+  .modal input[type="file"]{
+    margin:16px 0;
+  }
+
+  /* Active Challenges Grid */
+  .challenges-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .challenges-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+</style>
+</head>
+<body>
+ <div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+  
+  <div class="main">
+    <div class="dashboard">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3>Sustainability Tracker</h3>
+        <div class="profile-container">
+          <img src="Profile.jpg" alt="Profile" class="profile-pic"/>
+          <div class="text-right">
+            <div id="userPoints" class="text-green-600 font-bold"></div>
+            <div id="userRank" class="text-gray-500 text-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div id="metricsGrid" class="grid grid-cols-2 lg:grid-cols-4 mb-8"></div>
+
+      <!-- Active Challenges -->
+      <div class="mb-8">
+        <h4>Active Challenges</h4>
+        <div id="challengesList" class="challenges-grid"></div>
+      </div>
+
+      <!-- Recent Activities -->
+      <div class="mb-6">
+        <h4>Recent Activities</h4>
+        <div id="activitiesList" class="space-y-3"></div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="bg-gradient-to-r rounded-lg p-4">
+        <h4 class="font-semibold flex items-center mb-3">
+          <i data-lucide="award" class="w-5 h-5 mr-2 text-yellow-500"></i> Community Leaderboard
+        </h4>
+        <div id="leaderboardList" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="uploadModal" class="modal">
+    <div class="modal-content">
+      <h4>Upload Photo for Challenge</h4>
+      <input type="file" id="challengePhoto" accept="image/*"/>
+      <div style="margin-top:16px;">
+        <button onclick="submitPhoto()" style="background:green; color:white; padding:8px 16px;">Submit</button>
+        <button onclick="closeModal()" style="background:#ccc; color:#111; padding:8px 16px; margin-left:8px;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+let userPoints = 2847;
+const userRank = 156;
+let selectedChallengeId = null;
+
+const metrics = [
+  {id:'carbon',name:'Carbon Saved',value:245,unit:'kg CO₂',target:500,icon:'leaf',color:'green',trend:12},
+  {id:'waste',name:'Waste Recycled',value:89,unit:'kg',target:150,icon:'recycle',color:'blue',trend:8},
+  {id:'energy',name:'Energy Saved',value:1240,unit:'kWh',target:2000,icon:'zap',color:'yellow',trend:15},
+  {id:'water',name:'Water Conserved',value:3200,unit:'L',target:5000,icon:'droplets',color:'cyan',trend:6}
+];
+
+const challenges = [
+  {id:1,title:'Plastic-Free Week Challenge',description:'Avoid single-use plastics for 7 days and earn bonus points',participants:1247,reward:500,endDate:'2025-01-25',progress:65,category:'Waste Reduction'},
+  {id:2,title:'Green Commute Month',description:'Use public transport, bike, or walk for daily commutes',participants:892,reward:750,endDate:'2025-01-31',progress:40,category:'Transportation'},
+  {id:3,title:'Community Garden Project',description:'Help plant and maintain community gardens in your neighborhood',participants:456,reward:300,endDate:'2025-02-15',progress:80,category:'Urban Greening'}
+];
+
+const activities = [
+  {id:1,action:'Recycled 5kg of paper',points:50,time:'2 hours ago',icon:'recycle'},
+  {id:2,action:'Used bike for commute',points:25,time:'5 hours ago',icon:'leaf'},
+  {id:3,action:'Participated in cleanup drive',points:100,time:'1 day ago',icon:'users'},
+  {id:4,action:'Reduced energy consumption',points:30,time:'2 days ago',icon:'zap'}
+];
+
+// Update user stats
+function updateUserStats(){
+  document.getElementById('userPoints').textContent = userPoints.toLocaleString()+' pts';
+  document.getElementById('userRank').textContent = 'Rank #'+userRank;
+}
+updateUserStats();
+
+// Render Metrics
+const metricsGrid = document.getElementById('metricsGrid');
+metrics.forEach(m=>{
+  const progress = Math.min((m.value/m.target)*100,100);
+  const div = document.createElement('div');
+  div.className='bg-gray-50 rounded-lg p-4';
+  div.innerHTML=`
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div class="p-2 rounded-lg ${getColorClasses(m.color)}"><i data-lucide="${m.icon}"></i></div>
+      <div style="display:flex; align-items:center; font-size:12px; color:green;">+${m.trend}%</div>
+    </div>
+    <div style="margin-bottom:8px;">
+      <div style="font-weight:bold; font-size:16px;">${m.value}</div>
+      <div style="font-size:12px; color:#6b7280;">${m.unit}</div>
+    </div>
+    <div style="margin-bottom:8px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#6b7280;"><span>${m.name}</span><span>${Math.round(progress)}%</span></div>
+      <div style="width:100%; background:#e5e7eb; border-radius:9999px; height:8px;">
+        <div style="width:${progress}%; background:${getProgressColor(m.color)}; height:8px; border-radius:9999px; transition:width 0.5s;"></div>
+      </div>
+    </div>
+    <div style="font-size:12px; color:#6b7280;">Target: ${m.target} ${m.unit}</div>
+  `;
+  metricsGrid.appendChild(div);
+});
+
+// Render Challenges
+function renderChallenges(){
+  const challengesList = document.getElementById('challengesList');
+  challengesList.innerHTML = "";
+  challenges.forEach(c=>{
+    const daysLeft = Math.ceil((new Date(c.endDate)-new Date())/(1000*60*60*24));
+    const div = document.createElement('div');
+    div.className='border border-gray-200 rounded-lg p-4 hover:shadow-md';
+    div.innerHTML=`
+      <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <div style="font-weight:bold;">${c.title}</div>
+            <span style="font-size:10px; background:#dbeafe; color:#2563eb; padding:2px 4px; border-radius:9999px;">${c.category}</span>
+          </div>
+          <div style="font-size:12px; color:#6b7280; margin-bottom:4px;">${c.description}</div>
+        </div>
+        <div style="text-align:right; margin-left:16px;">
+          <div style="font-weight:bold; color:green;">${c.reward} pts</div>
+          <div style="font-size:12px; color:#6b7280;">${daysLeft} days left</div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:12px; color:#6b7280;">
+        <div>👥 ${c.participants.toLocaleString()} participants</div>
+        <div>${c.progress}% complete</div>
+      </div>
+      <div style="width:100%; background:#e5e7eb; border-radius:9999px; height:8px; margin-bottom:8px;">
+        <div style="width:${c.progress}%; background:green; height:8px; border-radius:9999px;"></div>
+      </div>
+      <button onclick="openUploadModal(${c.id})" style="width:100%; background:green; color:white; padding:8px; border-radius:8px;">Join Challenge</button>
+    `;
+    challengesList.appendChild(div);
+  });
+  lucide.createIcons();
+}
+renderChallenges();
+
+// Render Activities
+const activitiesList = document.getElementById('activitiesList');
+function renderActivities(){
+  activitiesList.innerHTML = "";
+  activities.forEach(a=>{
+    const div = document.createElement('div');
+    div.className='flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+    div.innerHTML=`
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="padding:4px; background:#d1fae5; color:green; border-radius:8px;"><i data-lucide="${a.icon}"></i></div>
+        <div>
+          <div style="font-weight:600;">${a.action}</div>
+          <div style="font-size:12px; color:#6b7280;">${a.time}</div>
+        </div>
+      </div>
+      <div style="color:green; font-weight:bold;">+${a.points} pts</div>
+    `;
+    activitiesList.appendChild(div);
+  });
+  lucide.createIcons();
+}
+renderActivities();
+
+// Render Leaderboard
+function renderLeaderboard(){
+  const leaderboardList = document.getElementById('leaderboardList');
+  leaderboardList.innerHTML="";
+  const leaderboard = [
+    {name:'EcoWarrior2024',pts:5247},
+    {name:'GreenCommuter',pts:4891},
+    {name:'SustainableLife',pts:4203},
+    {name:'You',pts:userPoints}
+  ];
+  leaderboard.forEach((l,i)=>{
+    const div = document.createElement('div');
+    div.style.display='flex';
+    div.style.justifyContent='space-between';
+    div.innerHTML=`<span style="font-size:12px; color:${i<3?'#111827':'#2563eb'}">${i<3?['🥇','🥈','🥉'][i]: '#'+(i+1)} ${l.name}</span><span style="font-size:12px; font-weight:bold; color:${i<3?'green':'blue'}">${l.pts.toLocaleString()} pts</span>`;
+    leaderboardList.appendChild(div);
+  });
+}
+
+// Helper functions
+function getColorClasses(color){
+  switch(color){
+    case 'green': return 'bg-green-100 text-green-600';
+    case 'blue': return 'bg-blue-100 text-blue-600';
+    case 'yellow': return 'bg-yellow-100 text-yellow-600';
+    case 'cyan': return 'bg-cyan-100 text-cyan-600';
+    default: return 'bg-gray-100 text-gray-600';
+  }
+}
+function getProgressColor(color){
+  switch(color){
+    case 'green': return 'green';
+    case 'blue': return 'blue';
+    case 'yellow': return '#facc15';
+    case 'cyan': return '#06b6d4';
+    default: return '#9ca3af';
+  }
+}
+
+// Modal handling
+const modal = document.getElementById('uploadModal');
+function openUploadModal(challengeId){
+  selectedChallengeId = challengeId;
+  modal.style.display = 'flex';
+}
+function closeModal(){
+  selectedChallengeId = null;
+  modal.style.display = 'none';
+}
+function submitPhoto(){
+  const fileInput = document.getElementById('challengePhoto');
+  if(fileInput.files.length === 0){
+    alert('Please select a photo to submit!');
+    return;
+  }
+  const ch = challenges.find(c=>c.id===selectedChallengeId);
+  if(ch){
+    ch.participants+=1;
+    userPoints+=ch.reward + 50; // extra 50 pts for submission
+    activities.unshift({id:Date.now(), action:`Submitted photo for "${ch.title}"`, points:ch.reward + 50, time:'Just now', icon:'camera'});
+    updateUserStats();
+    renderChallenges();
+    renderLeaderboard();
+    renderActivities();
+  }
+  fileInput.value = '';
+  closeModal();
+}
+
+// Initialize lucide icons
+lucide.createIcons();
+renderLeaderboard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community Board with Sidebar</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #1f2937;
+      color: #f9fafb;
+      height: 100vh;
+      padding: 20px 10px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #10b981;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d1d5db;
+      padding: 10px 14px;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: #374151;
+      color: #fff;
+    }
+
+    /* Main */
+    .main {
+      margin-left: 240px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h3 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .header button {
+      background-color: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .header button:hover {
+      background-color: #1d4ed8;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #f3f4f6;
+      padding: 5px;
+      border-radius: 8px;
+    }
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tabs button.active {
+      background: white;
+      color: #2563eb;
+      font-weight: bold;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .tabs button:hover:not(.active) {
+      color: #111827;
+    }
+
+    /* Event Cards */
+    .event {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: box-shadow 0.2s;
+    }
+    .event:hover {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .event img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+    .event-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .event-meta {
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .event p {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .event .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .event .tag {
+      font-size: 12px;
+      padding: 4px 8px;
+      background: #f3f4f6;
+      border-radius: 9999px;
+      color: #374151;
+    }
+
+    .event-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .event-actions button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-rsvp {
+      background-color: #2563eb;
+      color: white;
+    }
+    .btn-rsvp:hover {
+      background-color: #1d4ed8;
+    }
+    .btn-applied {
+      background-color: #16a34a;
+      color: white;
+    }
+    .btn-view {
+      background: none;
+      color: #2563eb;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+    }
+    .modal-content h3 {
+      margin-bottom: 10px;
+    }
+    .modal-content input, .modal-content select, .modal-content textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .modal-content button {
+      background: #2563eb;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+ <div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="container">
+      <div class="header">
+        <h3>Community Board</h3>
+        <button onclick="openModal()">Post New</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="active" onclick="switchTab(event, 'event')">Events</button>
+        <button onclick="switchTab(event, 'job')">Jobs</button>
+        <button onclick="switchTab(event, 'volunteer')">Volunteer</button>
+      </div>
+
+      <!-- Event List -->
+      <div id="events-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal for New Post -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>Post New</h3>
+      <select id="type">
+        <option value="event">Event</option>
+        <option value="job">Job</option>
+        <option value="volunteer">Volunteer</option>
+      </select>
+      <input type="text" id="title" placeholder="Title" required>
+      <textarea id="description" placeholder="Description"></textarea>
+      <input type="text" id="location" placeholder="Location">
+      <input type="date" id="date">
+      <input type="time" id="time">
+      <input type="text" id="organizer" placeholder="Organizer">
+      <input type="url" id="photo" placeholder="Image URL">
+      <button onclick="addPost()">Add</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Modal for RSVP -->
+  <div class="modal" id="rsvpModal">
+    <div class="modal-content">
+      <h3>RSVP</h3>
+      <input type="text" id="rsvpName" placeholder="Your Name">
+      <input type="email" id="rsvpEmail" placeholder="Your Email">
+      <button onclick="submitRSVP()">Submit</button>
+      <button onclick="closeRSVP()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const events = [
+      {
+        id: 1,
+        title: 'Community Garden Cleanup',
+        type: 'volunteer',
+        description: 'Join us for a morning of beautifying our neighborhood garden. Tools and refreshments provided.',
+        location: 'Central Community Garden',
+        date: '2025-01-20',
+        time: '9:00 AM',
+        organizer: 'Green Neighborhood Initiative',
+        attendees: 23,
+        maxAttendees: 50,
+        tags: ['Environment', 'Community'],
+        photo: 'Garden-Maintenance.jpg'
+      },
+      {
+        id: 2,
+        title: 'Local Food Festival',
+        type: 'event',
+        description: 'Celebrate local cuisine with food trucks, live music, and family activities.',
+        location: 'City Park Amphitheater',
+        date: '2025-01-25',
+        time: '12:00 PM',
+        organizer: 'City Events Committee',
+        attendees: 156,
+        maxAttendees: 500,
+        tags: ['Food', 'Music', 'Family'],
+        photo: 'food.jpg'
+      },
+      {
+        id: 3,
+        title: 'Part-time Event Assistant',
+        type: 'job',
+        description: 'Help coordinate community events. Flexible hours, great for students or retirees.',
+        location: 'City Hall',
+        date: '2025-01-18',
+        time: 'Flexible',
+        organizer: 'City Administration',
+        attendees: 8,
+        tags: ['Part-time', 'Administration'],
+        photo: 'jobs.jpg'
+      },
+      {
+        id: 4,
+        title: 'Digital Literacy Workshop',
+        type: 'event',
+        description: 'Free workshop teaching basic computer skills and internet safety for seniors.',
+        location: 'Public Library',
+        date: '2025-01-22',
+        time: '2:00 PM',
+        organizer: 'Tech for All Initiative',
+        attendees: 12,
+        maxAttendees: 20,
+        tags: ['Education', 'Technology', 'Seniors'],
+        photo: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c'
+      },
+      {
+        id: 5,
+        title: 'City Marathon 2025',
+        type: 'event',
+        description: 'Annual city marathon for all ages. Join the race or cheer for participants!',
+        location: 'Downtown Main Street',
+        date: '2025-02-10',
+        time: '6:00 AM',
+        organizer: 'City Sports Council',
+        attendees: 320,
+        maxAttendees: 1000,
+        tags: ['Sports', 'Health'],
+        photo: 'marathon.jpg'
+      }
+    ];
+
+    let activeTab = 'event';
+    let selectedRSVP = null;
+
+    function switchTab(e, tab) {
+      activeTab = tab;
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      e.target.classList.add('active');
+      renderEvents();
+    }
+
+    function openRSVP(id) {
+      selectedRSVP = events.find(e => e.id === id);
+      document.getElementById('rsvpModal').style.display = 'flex';
+    }
+
+    function closeRSVP() {
+      document.getElementById('rsvpModal').style.display = 'none';
+    }
+
+    function submitRSVP() {
+      const name = document.getElementById('rsvpName').value;
+      const email = document.getElementById('rsvpEmail').value;
+      if (!name || !email) return;
+      alert(`Thank you ${name}! You are registered for ${selectedRSVP.title}.\nDate: ${selectedRSVP.date}\nTime: ${selectedRSVP.time}\nLocation: ${selectedRSVP.location}`);
+      closeRSVP();
+    }
+
+    function renderEvents() {
+      const list = document.getElementById('events-list');
+      list.innerHTML = '';
+      const filtered = events.filter(e => e.type === activeTab);
+      if (filtered.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:20px; color:#6b7280;">No ${activeTab}s available right now.</div>`;
+        return;
+      }
+
+      filtered.forEach(ev => {
+        const div = document.createElement('div');
+        div.className = 'event';
+        div.innerHTML = `
+          ${ev.photo ? `<img src="${ev.photo}" alt="${ev.title}">` : ''}
+          <div class="event-header">
+            <div>
+              <div class="event-title">${ev.title}</div>
+              <div class="event-meta">by ${ev.organizer}</div>
+            </div>
+            <div class="event-meta">${ev.date} • ${ev.time}</div>
+          </div>
+          <p>${ev.description}</p>
+          <div class="event-meta">📍 ${ev.location} | 👥 ${ev.attendees}${ev.maxAttendees ? '/' + ev.maxAttendees : ''}</div>
+          <div class="tags">
+            ${ev.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+          <div class="event-actions">
+            ${ev.type !== 'job'
+              ? `<button class="btn-rsvp" onclick="openRSVP(${ev.id})">RSVP</button>`
+              : `<button class="btn-applied" onclick="window.location.href='registration.html?jobId=${ev.id}'">Apply Now</button>`}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+
+
+    function addPost() {
+      const newEvent = {
+        id: events.length + 1,
+        type: document.getElementById('type').value,
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        location: document.getElementById('location').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        organizer: document.getElementById('organizer').value,
+        attendees: 0,
+        tags: ['New'],
+        photo: document.getElementById('photo').value || `https://picsum.photos/600/300?random=${Math.floor(Math.random()*1000)}`
+      };
+      events.push(newEvent);
+      closeModal();
+      renderEvents();
+    }
+
+    renderEvents();
+    lucide.createIcons();
+  </script>
+</body>
+</html>

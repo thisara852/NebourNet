@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityNav - Sign Up</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Arial', sans-serif; }
+  body, html { height: 100%; width:100%; display: flex; justify-content: center; align-items: center; background: #f3f4f6; }
+
+  .signup-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    padding: 40px 30px;
+  }
+
+  .logo { text-align: center; margin-bottom: 30px; }
+  .logo h1 { color: #10b981; font-size: 32px; font-weight: bold; }
+  .logo p { color:#6b7280; font-size:14px; margin-top:5px; }
+
+  h2 { text-align:center; color:#1f2937; margin-bottom:20px; font-size:24px; }
+  input { width:100%; padding:14px; margin-bottom:16px; border-radius:8px; border:1px solid #d1d5db; font-size:15px; transition:0.3s; }
+  input:focus { outline:none; border-color:#10b981; box-shadow:0 0 0 2px rgba(16,185,129,0.2); }
+
+  .btn { width:100%; padding:14px; border:none; border-radius:8px; background:#10b981; color:white; font-weight:bold; font-size:16px; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.3s; }
+  .btn:hover { background:#059669; }
+
+  .alt-login { text-align:center; margin:20px 0; position:relative; }
+  .alt-login::before { content:""; display:block; height:1px; background:#e5e7eb; position:absolute; top:50%; left:0; right:0; }
+  .alt-login span { background:white; position:relative; padding:0 10px; color:#6b7280; font-size:14px; }
+
+  .social-login { display:flex; justify-content:center; gap:12px; margin-bottom:25px; }
+  .social-btn { flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; color:white; border:none; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.3s; }
+  .google{background:#DB4437;} .google:hover{background:#a8362b;}
+  .facebook{background:#1877F2;} .facebook:hover{background:#125bb5;}
+
+  .alt-links { font-size:14px; color:#6b7280; text-align:center; }
+  .alt-links a { color:#10b981; text-decoration:none; font-weight:bold; }
+  .alt-links a:hover { text-decoration:underline; }
+
+  @media (max-width:400px){
+    .signup-container{ padding:30px 20px; }
+    input, .btn { font-size:14px; padding:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="signup-container">
+  <div class="logo">
+    <h1>NeighbhorNet</h1>
+    <p>Create your account</p>
+  </div>
+
+  <h2>Sign Up</h2>
+  <input type="text" id="fullName" placeholder="Full Name" required>
+  <input type="email" id="email" placeholder="Email address" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+  <button class="btn" id="signupBtn"><i data-lucide="user-plus"></i> Sign Up</button>
+
+  <div class="alt-login"><span>Or sign up with</span></div>
+  <div class="social-login">
+    <button class="social-btn google"><i data-lucide="mail"></i> Google</button>
+    <button class="social-btn facebook"><i data-lucide="thumbs-up"></i> Facebook</button>
+  </div>
+
+  <div class="alt-links">Already have an account? <a href="Signin.html">Log in</a></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  lucide.createIcons();
+
+  document.getElementById('signupBtn').addEventListener('click', () => {
+    const name = document.getElementById('fullName')?.value.trim();
+    const email = document.getElementById('email')?.value.trim();
+    const pass = document.getElementById('password')?.value;
+    const confirm = document.getElementById('confirmPassword')?.value;
+
+    // Validation
+    if (!name || !email || !pass || !confirm) {
+      alert('⚠️ Please fill all fields!');
+      return;
+    }
+
+    if (pass !== confirm) {
+      alert('⚠️ Passwords do not match!');
+      return;
+    }
+
+    // Success message
+    alert(`✅ Account created for ${name} (${email})`);
+
+    // Redirect to login page or dashboard
+    window.location.href = 'city dashboard.html'; // Change to desired page
+  });
+
+  // Social signup placeholders
+  document.querySelector('.google')?.addEventListener('click', () => {
+    alert('Google signup selected');
+  });
+
+  document.querySelector('.facebook')?.addEventListener('click', () => {
+    alert('Facebook signup selected');
+  });
+});
+
+</script>
+</body>
+</html>

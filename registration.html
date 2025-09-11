@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply Now - Job</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial,sans-serif;
+    display: flex;
+    background: #f3f4f6;
+    color: #111827;
+  }
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #1f2937;
+    color: #f9fafb;
+    height: 100vh;
+    padding: 20px 10px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .sidebar h2 {
+    text-align: center;
+    color: #10b981;
+    margin-bottom: 20px;
+  }
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d1d5db;
+    padding: 10px 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+  .sidebar a:hover {
+    background: #374151;
+    color: #fff;
+  }
+
+  /* Main content */
+  .main {
+    margin-left: 240px;
+    padding: 20px;
+    flex: 1;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 24px;
+  }
+
+  /* Job Header */
+  .job-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .job-header img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .job-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+  }
+  .job-company {
+    font-size: 1rem;
+    color: #6b7280;
+  }
+  .job-info {
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  /* Form */
+  input,textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  .btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .btn-blue {
+    background: #2563eb;
+    color: white;
+    padding: 10px 16px;
+  }
+  .btn-blue:hover {
+    background: #1d4ed8;
+  }
+  #applyMsg {
+    margin-top: 12px;
+    color: green;
+    font-weight: 500;
+  }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .main{margin-left:0;padding:12px;}
+    .sidebar{width:100%;height:auto;flex-direction:row;overflow-x:auto;position:relative;}
+  }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+
+<div class="main">
+  <!-- Job Header -->
+  <div class="card job-header">
+    <img src="photo.jpg" alt="Company Photo">
+    <div class="job-title">Frontend Developer</div>
+    <div class="job-company">Tech Solutions Inc.</div>
+    <div class="job-info">Location: Colombo, Sri Lanka | Type: Full-time | Posted: 5 days ago</div>
+  </div>
+
+  <!-- Apply Form -->
+  <div class="card">
+    <h3>Apply for this Job</h3>
+    <form id="applyForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea id="resume" rows="4" placeholder="Paste your resume or cover letter..." required></textarea>
+      <button type="submit" class="btn btn-blue"><i data-lucide="check-circle"></i> Apply</button>
+    </form>
+    <div id="applyMsg"></div>
+  </div>
+
+  <!-- Job Description -->
+  <div class="card">
+    <h3>Job Description</h3>
+    <p>We are looking for a talented Frontend Developer to join our team. You will be responsible for developing user interfaces using modern web technologies, collaborating with designers and backend developers, and ensuring responsive and user-friendly web applications.</p>
+    <p><strong>Requirements:</strong> HTML, CSS, JavaScript, React.js, attention to detail, teamwork.</p>
+    <p><strong>Benefits:</strong> Competitive salary, flexible hours, remote-friendly environment, professional development.</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('applyForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  document.getElementById('applyMsg').innerText = `Application submitted successfully by ${name}!`;
+  this.reset();
+});
+lucide.createIcons();
+</script>
+
+</body>
+</html>

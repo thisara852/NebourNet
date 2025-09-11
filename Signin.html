@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityNav - Login</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Arial', sans-serif; }
+  body, html { height: 100%; width:100%; display: flex; justify-content: center; align-items: center; background: #f3f4f6; }
+
+  .login-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    padding: 40px 30px;
+  }
+
+  .logo { text-align: center; margin-bottom: 30px; }
+  .logo h1 { color: #10b981; font-size: 32px; font-weight: bold; }
+  .logo p { color:#6b7280; font-size:14px; margin-top:5px; }
+
+  h2 { text-align:center; color:#1f2937; margin-bottom:20px; font-size:24px; }
+  input { width:100%; padding:14px; margin-bottom:16px; border-radius:8px; border:1px solid #d1d5db; font-size:15px; transition:0.3s; }
+  input:focus { outline:none; border-color:#10b981; box-shadow:0 0 0 2px rgba(16,185,129,0.2); }
+
+  .btn { width:100%; padding:14px; border:none; border-radius:8px; background:#10b981; color:white; font-weight:bold; font-size:16px; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.3s; }
+  .btn:hover { background:#059669; }
+
+  .alt-login { text-align:center; margin:20px 0; position:relative; }
+  .alt-login::before { content:""; display:block; height:1px; background:#e5e7eb; position:absolute; top:50%; left:0; right:0; }
+  .alt-login span { background:white; position:relative; padding:0 10px; color:#6b7280; font-size:14px; }
+
+  .social-login { display:flex; justify-content:center; gap:12px; margin-bottom:25px; }
+  .social-btn { flex:1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; color:white; border:none; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.3s; }
+  .google{background:#DB4437;} .google:hover{background:#a8362b;}
+  .facebook{background:#1877F2;} .facebook:hover{background:#125bb5;}
+
+  .alt-links { font-size:14px; color:#6b7280; text-align:center; }
+  .alt-links a { color:#10b981; text-decoration:none; font-weight:bold; }
+  .alt-links a:hover { text-decoration:underline; }
+
+  @media (max-width:400px){
+    .login-container{ padding:30px 20px; }
+    input, .btn { font-size:14px; padding:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="login-container">
+  <div class="logo">
+    <h1>NeighbhorNet</h1>
+    <p>Your Smart City Dashboard</p>
+  </div>
+
+  <h2>Log in to your account</h2>
+  <input type="email" id="email" placeholder="Email address" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <button class="btn" id="loginBtn"><i data-lucide="log-in"></i> Log In</button>
+
+  <div class="alt-login"><span>Or continue with</span></div>
+  <div class="social-login">
+    <button class="social-btn google"><i data-lucide="mail"></i> Google</button>
+    <button class="social-btn facebook"><i data-lucide="thumbs-up"></i> Facebook</button>
+  </div>
+
+  <div class="alt-links">Don't have an account? <a href="signup.html">Sign up</a></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  lucide.createIcons();
+
+  // Redirect login button to dashboard or any page
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    window.location.href = 'city dashboard.html'; // <-- change to your target page
+  });
+
+  document.querySelector('.google').addEventListener('click', () => alert('Google login selected'));
+  document.querySelector('.facebook').addEventListener('click', () => alert('Facebook login selected'));
+});
+</script>
+</body>
+</html>

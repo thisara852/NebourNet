@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mobility Guide</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial,sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    display: flex;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #1f2937;
+    color: #f9fafb;
+    height: 100vh;
+    padding: 20px 10px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: #10b981;
+  }
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d1d5db;
+    padding: 10px 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+  .sidebar a:hover {
+    background: #374151;
+    color: #fff;
+  }
+
+  /* Main */
+  .main {
+    margin-left: 240px;
+    padding: 20px;
+    flex: 1;
+  }
+  .dashboard {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    margin: auto;
+  }
+  h3 { font-size: 22px; font-weight: bold; margin-bottom: 12px; }
+  .section { margin-bottom: 24px; }
+
+  .option-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: white;
+  }
+
+  .station {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f9fafb;
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+  .btn:hover { background: #1d4ed8; }
+
+  input {
+    border: 1px solid #d1d5db;
+    padding: 6px;
+    border-radius: 6px;
+    width: 100%;
+    font-size: 14px;
+  }
+  label { display: block; margin-bottom: 4px; font-weight: 500; }
+
+  /* Booking Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+  .modal-content {
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    width:300px;
+    text-align:center;
+  }
+  .modal h4 { margin-bottom:12px; }
+  .close-btn {
+    background:#dc2626;
+    margin-top:10px;
+  }
+
+  /* Journey Results */
+  .journey-route {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f9fafb;
+  }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+
+  <div class="main">
+    <div class="dashboard">
+      <h3>Smart Mobility Guide</h3>
+
+      <!-- Route Planning -->
+      <div class="section">
+        <h4>Plan Your Route</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label>From</label>
+            <input id="origin" type="text" placeholder="Enter starting point" />
+          </div>
+          <div>
+            <label>To</label>
+            <input id="destination" type="text" placeholder="Enter destination" />
+          </div>
+        </div>
+        <button id="startJourney" class="btn">Start Journey</button>
+        <div id="journeyMsg" style="margin-top:12px; color:green;"></div>
+        <div id="journeyRoutes" style="margin-top:16px;"></div>
+      </div>
+
+      <!-- Transport Options -->
+      <div class="section">
+        <h4>Available Transport Options</h4>
+        <div id="transportOptions"></div>
+      </div>
+
+      <!-- Nearby Stations -->
+      <div class="section">
+        <h4>Nearby Stations</h4>
+        <div id="stations"></div>
+      </div>
+
+      <!-- Live Updates -->
+      <div class="section" style="background:#eff6ff; padding:12px; border-radius:8px;">
+        <h4><i data-lucide="wifi"></i> Live Updates</h4>
+        <div id="liveUpdates"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="modal" id="bookingModal">
+    <div class="modal-content">
+      <h4 id="bookingTitle">Book Transport</h4>
+      <form id="bookingForm">
+        <label>Name</label>
+        <input type="text" id="userName" required>
+        <label>Preferred Time</label>
+        <input type="time" id="time" required>
+        <button type="submit" class="btn">Confirm Booking</button>
+        <button type="button" class="btn close-btn" onclick="closeModal()">Cancel</button>
+      </form>
+      <div id="bookingMsg" style="margin-top:10px; color:green;"></div>
+    </div>
+  </div>
+
+<script>
+  lucide.createIcons();
+
+  // --- Transport Options ---
+  const transportOptions = [
+    {id:'bike',name:'City Bike Share',duration:'12 min',cost:'$2.50',icon:'bike'},
+    {id:'bus',name:'Electric Bus',duration:'18 min',cost:'$1.75',icon:'bus'},
+    {id:'ev',name:'EV Car Share',duration:'8 min',cost:'$4.20',icon:'car'},
+    {id:'scooter',name:'E-Scooter',duration:'10 min',cost:'$3.00',icon:'zap'}
+  ];
+
+  // Render Transport Options
+  function renderTransportOptions() {
+    const container = document.getElementById("transportOptions");
+    container.innerHTML = "";
+    transportOptions.forEach(option => {
+      container.innerHTML += `
+        <div class="option-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <i data-lucide="${option.icon}"></i>
+              <div>
+                <strong>${option.name}</strong><br>
+                <small>${option.duration}</small>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div><strong>${option.cost}</strong></div>
+            </div>
+          </div>
+          <button class="btn" onclick="openBooking('${option.name}')">Book Now</button>
+        </div>`;
+    });
+    lucide.createIcons();
+  }
+
+  // Open booking modal
+  function openBooking(name){
+    document.getElementById("bookingModal").style.display = "flex";
+    document.getElementById("bookingTitle").innerText = `Book: ${name}`;
+    document.getElementById("bookingMsg").innerText = "";
+    document.getElementById("bookingForm").dataset.transport = name;
+  }
+
+  function closeModal(){
+    document.getElementById("bookingModal").style.display = "none";
+  }
+
+  // Handle booking form
+  document.getElementById("bookingForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("userName").value;
+    const time = document.getElementById("time").value;
+    const transport = this.dataset.transport;
+    document.getElementById("bookingMsg").innerText = `✅ ${name}, your ${transport} has been booked for ${time}.`;
+    setTimeout(()=>closeModal(),2000);
+  });
+
+  // Journey Planner
+  document.getElementById("startJourney").addEventListener("click", () => {
+    const from = document.getElementById("origin").value;
+    const to = document.getElementById("destination").value;
+    const journeyMsg = document.getElementById("journeyMsg");
+    const journeyRoutes = document.getElementById("journeyRoutes");
+
+    if(!from || !to) {
+      journeyMsg.style.color = "red";
+      journeyMsg.innerText = "⚠️ Please enter both From and To locations.";
+      journeyRoutes.innerHTML = "";
+      return;
+    }
+
+    journeyMsg.style.color = "green";
+    journeyMsg.innerText = `Showing best routes from ${from} to ${to}:`;
+
+    const sampleRoutes = [
+      {method:'bike',time:'12 min',cost:'$2.50',steps:['Take a bike from Central Station','Ride via Main Street','Arrive at '+to]},
+      {method:'bus',time:'18 min',cost:'$1.75',steps:['Walk to Metro Stop A','Take Bus 42','Arrive near '+to]},
+      {method:'ev',time:'8 min',cost:'$4.20',steps:['Pick up EV from Plaza Hub','Drive via City Highway','Arrive at '+to]}
+    ];
+
+    journeyRoutes.innerHTML = "";
+    sampleRoutes.forEach(route => {
+      journeyRoutes.innerHTML += `
+        <div class="journey-route">
+          <strong><i data-lucide="${route.method==='bike'?'bike':route.method==='bus'?'bus':'car'}"></i> ${route.method.toUpperCase()}</strong><br>
+          ⏱ ${route.time} • 💵 ${route.cost}
+          <div class="journey-steps">
+            ${route.steps.map(s => `<div class="step"><i data-lucide="chevron-right"></i>${s}</div>`).join('')}
+          </div>
+        </div>`;
+    });
+    lucide.createIcons();
+  });
+
+  // --- Stations ---
+  const stations = [
+    {id:1,name:'Central Station',type:'bike',available:12,total:15,distance:'0.2 km',lat:6.9271,lng:79.8612},
+    {id:2,name:'Plaza Charging Hub',type:'ev',available:3,total:8,distance:'0.3 km',battery:95,lat:6.9147,lng:79.9725},
+    {id:3,name:'Metro Stop A',type:'scooter',available:8,total:12,distance:'0.1 km',battery:87,lat:6.9335,lng:79.8500},
+    {id:4,name:'University Campus',type:'bike',available:6,total:20,distance:'0.5 km',lat:6.9022,lng:79.8611},
+    {id:5,name:'Shopping District',type:'ev',available:2,total:6,distance:'0.4 km',battery:78,lat:6.9055,lng:79.8782}
+  ];
+
+  function renderStations() {
+    const container = document.getElementById("stations");
+    container.innerHTML = "";
+    stations.forEach(st => {
+      container.innerHTML += `
+        <div class="station">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i data-lucide="${st.type==='bike'?'bike':st.type==='ev'?'car':'zap'}"></i>
+            <div>
+              <strong>${st.name}</strong><br>
+              <small>${st.distance} ${st.battery?`🔋 ${st.battery}%`:''}</small>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <strong>${st.available}/${st.total}</strong><br>
+            <button class="btn" onclick="viewStationLocation(${st.lat},${st.lng})">View Location</button>
+          </div>
+        </div>`;
+    });
+    lucide.createIcons();
+  }
+
+  function viewStationLocation(lat,lng) {
+    const url = `https://www.google.com/maps?q=${lat},${lng}`;
+    window.open(url, "_blank");
+  }
+
+  // --- Live Updates ---
+  const liveUpdates = [
+    {id:1,message:'Bus Route 42 delayed by 3 minutes',type:'warning',time:'2 min ago'},
+    {id:2,message:'New bike station opened at City Park',type:'info',time:'15 min ago'},
+    {id:3,message:'EV charging rates reduced by 20% today',type:'success',time:'1 hour ago'}
+  ];
+
+  function renderLiveUpdates() {
+    const container = document.getElementById("liveUpdates");
+    container.innerHTML = "";
+    liveUpdates.forEach(update => {
+      container.innerHTML += `
+        <div class="live-update">
+          <div class="dot ${update.type}"></div>
+          <div>
+            <div>${update.message}</div>
+            <small>${update.time}</small>
+          </div>
+        </div>`;
+    });
+  }
+
+  // Init
+  renderTransportOptions();
+  renderStations();
+  renderLiveUpdates();
+</script>
+</body>
+</html>

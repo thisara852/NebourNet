@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smart City Map - Next Gen</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+  body { display:flex; min-height:100vh; background:#f3f4f6; color:#111827; }
+
+  /* Sidebar */
+  .sidebar { width:220px; background:#1f2937; color:#f9fafb; height:100vh; padding:20px 10px; position:fixed; display:flex; flex-direction:column; gap:16px; }
+  .sidebar h2 { font-size:20px; font-weight:bold; text-align:center; color:#10b981; margin-bottom:20px; }
+  .sidebar a { display:flex; align-items:center; gap:10px; color:#d1d5db; padding:10px 14px; text-decoration:none; border-radius:8px; transition:0.3s; }
+  .sidebar a:hover { background:#374151; color:#fff; }
+
+  /* Main content */
+  .main { margin-left:240px; padding:20px; flex:1; }
+  .dashboard { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 16px rgba(0,0,0,0.1); max-width:1200px; margin:auto; }
+
+  .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .header h3 { display:flex; align-items:center; gap:8px; font-size:22px; font-weight:bold; }
+  .header .live-status { display:flex; align-items:center; gap:4px; font-size:14px; color:#2563eb; }
+
+  .welcome { margin-bottom:20px; font-size:16px; color:#374151; }
+
+  .filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .filter-btn { padding:6px 14px; border-radius:9999px; font-size:13px; cursor:pointer; border:1px solid transparent; transition:all 0.3s; background:white; }
+  .filter-btn.active { font-weight:bold; border-color:currentColor; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
+
+  /* Map container with background image */
+  .map-container { position:relative; height:500px; border-radius:12px; margin-bottom:16px; overflow:hidden; 
+    background: url('img.jpg') no-repeat center center;
+    background-size: cover;
+  }
+
+  .marker { position:absolute; width:40px; height:40px; border-radius:50%; border:2px solid; display:flex; align-items:center; justify-content:center; cursor:pointer; color:white; transition: transform 0.3s, box-shadow 0.3s; }
+  .marker:hover { transform: scale(1.4); box-shadow:0 4px 12px rgba(0,0,0,0.3); z-index:999; }
+
+  .info-panel { position:absolute; background:rgba(255,255,255,0.98); border-radius:12px; padding:16px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2); width:260px; display:none; z-index:1000; transition: all 0.3s ease; }
+  .info-panel h4 { margin:0 0 8px; font-size:16px; color:#111827; }
+  .info-panel p { font-size:14px; margin:4px 0; color:#374151; }
+  .info-panel .details-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+  .info-panel .btn { padding:6px 12px; border-radius:6px; color:white; background:#2563eb; text-decoration:none; display:inline-block; margin-top:8px; font-weight:bold; }
+  .info-panel .btn:hover { background:#1d4ed8; }
+  .info-panel button { padding:6px 12px; border-radius:6px; cursor:pointer; margin-top:8px; }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:16px; }
+  .stat-box { background:#f9fafb; padding:12px 8px; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+  .stat-box div:first-child { font-size:20px; font-weight:bold; }
+  .stat-box div:last-child { font-size:12px; color:#6b7280; }
+
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+<div class="main">
+  <div class="dashboard">
+    <div class="header">
+      <h3><i data-lucide="map-pin" style="color:#2563eb;"></i> Smart City Map</h3>
+      <div class="live-status"><i data-lucide="wifi"></i> Live Data</div>
+    </div>
+
+    <div class="welcome">Welcome, <strong>City Manager</strong>! Explore city updates and community reports in real-time.</div>
+
+    <div class="filters" id="filterContainer"></div>
+
+    <div class="map-container" id="mapContainer"></div>
+
+    <div class="info-panel" id="infoPanel"></div>
+
+    
+  </div>
+</div>
+
+<script>
+const markers = [
+  {id:1,type:'issue',title:'Pothole Reported',description:'Large pothole causing traffic',status:'pending',priority:'high',x:20,y:40,data:{votes:23,reportedBy:'Citizen',timeAgo:'2h'}},
+  {id:2,type:'sensor',title:'Air Quality',description:'Real-time AQI data',status:'active',priority:'medium',x:60,y:20,data:{aqi:42,status:'Good'}},
+  {id:3,type:'station',title:'EV Charging',description:'Fast charging available',status:'active',priority:'low',x:45,y:60,data:{available:3,total:8}},
+  {id:4,type:'event',title:'Community Cleanup',description:'Neighborhood cleanup',status:'active',priority:'medium',x:70,y:45,data:{participants:45}},
+  {id:5,type:'issue',title:'Streetlight Out',description:'Broken streetlight',status:'resolved',priority:'medium',x:30,y:70,data:{votes:12,resolvedBy:'Maintenance'}}
+];
+
+const filterTypes = ['issue','sensor','station','event'];
+let activeFilters = new Set(filterTypes);
+const filterContainer = document.getElementById('filterContainer');
+const mapContainer = document.getElementById('mapContainer');
+const infoPanel = document.getElementById('infoPanel');
+const mapStats = document.getElementById('mapStats');
+
+function getColor(type, marker=null){
+  if(marker && marker.status==='resolved') return 'green';
+  switch(type){
+    case 'issue': return 'red';
+    case 'sensor': return 'blue';
+    case 'station': return 'purple';
+    case 'event': return 'green';
+  }
+  return 'gray';
+}
+
+function createFilters(){
+  filterContainer.innerHTML='';
+  filterTypes.forEach(type=>{
+    const btn=document.createElement('button');
+    btn.textContent=type.charAt(0).toUpperCase()+type.slice(1)+` (${markers.filter(m=>m.type===type).length})`;
+    btn.className='filter-btn'+(activeFilters.has(type)?' active':'');
+    btn.style.color=getColor(type);
+    btn.onclick=()=>{ toggleFilter(type); };
+    filterContainer.appendChild(btn);
+  });
+}
+
+function toggleFilter(type){
+  if(activeFilters.has(type)) activeFilters.delete(type);
+  else activeFilters.add(type);
+  createFilters();
+  renderMap();
+  renderStats();
+  infoPanel.style.display='none';
+}
+
+function renderMap(){
+  mapContainer.innerHTML='';
+  markers.filter(m=>activeFilters.has(m.type)).forEach(m=>{
+    const div=document.createElement('div');
+    div.className='marker';
+    div.style.left=m.x+'%';
+    div.style.top=m.y+'%';
+    div.style.backgroundColor=getColor(m.type,m);
+    div.onclick=(e)=>{ showInfoPanel(m,e); };
+    const icon=document.createElement('i');
+    icon.setAttribute('data-lucide', m.type==='issue'?'alert-triangle': m.type==='sensor'?'camera': m.type==='station'?'zap':'map-pin');
+    div.appendChild(icon);
+    mapContainer.appendChild(div);
+  });
+  lucide.createIcons();
+}
+
+function showInfoPanel(marker,event){
+  infoPanel.style.display='block';
+  const rect = mapContainer.getBoundingClientRect();
+  let left = event.clientX - rect.left + 10;
+  let top = event.clientY - rect.top + 10;
+  if(left + 260 > rect.width) left = rect.width - 270;
+  if(top + 180 > rect.height) top = rect.height - 190;
+  infoPanel.style.left = left+'px';
+  infoPanel.style.top = top+'px';
+  infoPanel.innerHTML = `
+    <h4>${marker.title}</h4>
+    <p>${marker.description}</p>
+    <div class="details-grid">
+      ${Object.entries(marker.data).map(([k,v])=>`<div><div style="color:#6b7280;font-size:10px;">${k}</div><div style="font-weight:600">${v}</div></div>`).join('')}
+    </div>
+    <button onclick="infoPanel.style.display='none'">Close</button>
+    <a href="new.html" class="btn" style="margin-left:8px;">Take action</a>
+  `;
+}
+
+function renderStats(){
+  mapStats.innerHTML='';
+  const counts = {
+    issue: markers.filter(m=>m.type==='issue' && m.status==='pending').length,
+    sensor: markers.filter(m=>m.type==='sensor').length,
+    station: markers.filter(m=>m.type==='station').length,
+    event: markers.filter(m=>m.type==='event').length
+  };
+  for(const [key,val] of Object.entries(counts)){
+    const div=document.createElement('div');
+    div.className='stat-box';
+    div.innerHTML=`<div style="color:${getColor(key)}">${val}</div><div>${key.charAt(0).toUpperCase()+key.slice(1)}s</div>`;
+    mapStats.appendChild(div);
+  }
+}
+
+createFilters();
+renderMap();
+renderStats();
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Issue Tracker</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    display:flex;
+    background:#f3f4f6;
+    color:#111827;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width:220px;
+    background:#1f2937;
+    color:#f9fafb;
+    height:100vh;
+    padding:20px 10px;
+    position:fixed;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .sidebar h2 {
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    color:#10b981;
+    margin-bottom:20px;
+  }
+  .sidebar a {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#d1d5db;
+    padding:10px 14px;
+    text-decoration:none;
+    border-radius:8px;
+    transition: background 0.3s;
+  }
+  .sidebar a:hover {
+    background:#374151;
+    color:#fff;
+  }
+
+  /* Main content */
+  .main {
+    margin-left:240px;
+    padding:20px;
+    flex:1;
+  }
+
+  .card {
+    background:white;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom:24px;
+  }
+
+  h3{ font-size:22px; font-weight:bold; margin-bottom:16px; }
+  h4{ font-size:18px; font-weight:bold; margin-bottom:12px; }
+
+  /* Buttons */
+  .btn{
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:600;
+    transition:all 0.3s;
+  }
+  .btn-blue{
+    background:#2563eb;
+    color:white;
+    padding:8px 16px;
+  }
+  .btn-blue:hover{
+    background:#1d4ed8;
+  }
+  .btn-gray{
+    background:#e5e7eb;
+    color:#374151;
+    padding:8px 16px;
+  }
+  .btn-gray:hover{
+    background:#d1d5db;
+  }
+  .btn-vote{
+    background:#f3f4f6;
+    border:1px solid #d1d5db;
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:14px;
+    color:#2563eb;
+  }
+  .btn-vote:hover{
+    background:#2563eb;
+    color:white;
+  }
+  .btn-detail{
+    background:#f3f4f6;
+    border:1px solid #d1d5db;
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:14px;
+    color:#374151;
+  }
+  .btn-detail:hover{
+    background:#374151;
+    color:white;
+  }
+
+  .bg-gray-50{ background:#f9fafb; }
+  .rounded-lg{ border-radius:12px; }
+  .rounded-2xl{ border-radius:16px; }
+  .p-4{ padding:16px; }
+  .p-6{ padding:24px; }
+  .mb-4{ margin-bottom:16px; }
+  .mb-6{ margin-bottom:24px; }
+  .mb-3{ margin-bottom:12px; }
+  .text-gray-900{ color:#111827; }
+  .text-gray-700{ color:#374151; }
+  .text-gray-500{ color:#6b7280; }
+  .text-blue-600{ color:#2563eb; }
+  .text-blue-700{ color:#1d4ed8; }
+  .text-yellow-800{ color:#b45309; }
+  .text-yellow-500{ color:#f59e0b; }
+  .text-green-500{ color:#16a34a; }
+  .text-green-800{ color:#065f46; }
+  .bg-yellow-100{ background:#fef3c7; }
+  .bg-blue-100{ background:#dbeafe; }
+  .bg-green-100{ background:#d1fae5; }
+  .flex{ display:flex; }
+  .justify-between{ justify-content:space-between; }
+  .items-center{ align-items:center; }
+  .space-x-2>* + *{ margin-left:8px; }
+  .space-y-4>* + *{ margin-top:16px; }
+  .px-2{ padding-left:8px; padding-right:8px; }
+  .py-1{ padding-top:4px; padding-bottom:4px; }
+  .text-xs{ font-size:12px; }
+  .font-semibold{ font-weight:600; }
+  .font-medium{ font-weight:500; }
+  textarea,input,select{
+    width:100%;
+    padding:8px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    outline:none;
+  }
+  textarea:focus,input:focus,select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 2px rgba(37,99,235,0.3);
+  }
+
+  /* Modal */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+  .modal-content {
+    background:white;
+    padding:24px;
+    border-radius:16px;
+    width:90%;
+    max-width:400px;
+    position:relative;
+  }
+  .modal-close {
+    position:absolute;
+    top:8px;
+    right:12px;
+    background:none;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h2>NeighbhorNet</h2>
+  <a href="city dashboard.html"><i data-lucide="home"></i> Home</a>
+  <a href="community.html"><i data-lucide="users"></i> Community</a>
+  <a href="Mobile Guide.html"><i data-lucide="smartphone"></i> Mobile Guide</a>
+  <a href="Public Polls.html"><i data-lucide="clipboard"></i> Public Polls</a>
+  <a href="Smartcity.html"><i data-lucide="cpu"></i> Smart City</a>
+  <a href="envi.html"><i data-lucide="leaf"></i> Environment</a>
+  <a href="trafic.html"><i data-lucide="traffic-cone"></i>Community Issue</a>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="flex justify-between items-center mb-4">
+      <h3>Community Issue Tracker</h3>
+      <button id="reportBtn" class="btn btn-blue"><i data-lucide="map-pin"></i> Report Issue</button>
+    </div>
+
+    <div id="reportForm" class="bg-gray-50 rounded-lg p-6 mb-6" style="display:none;">
+      <h4>Report New Issue</h4>
+      <form id="newIssueForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Issue Type</label>
+          <select id="issueType" required>
+            <option value="">Select issue type</option>
+            <option value="Pothole">Pothole</option>
+            <option value="Streetlight">Streetlight</option>
+            <option value="Waste Management">Waste Management</option>
+            <option value="Traffic Signal">Traffic Signal</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Description</label>
+          <textarea id="issueDesc" rows="3" placeholder="Describe the issue..." required></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Location</label>
+          <input type="text" id="issueLoc" placeholder="Enter street or landmark" required>
+        </div>
+        <div class="flex gap-2">
+          <button type="submit" class="btn btn-blue"><i data-lucide="send"></i> Submit</button>
+          <button type="button" id="cancelBtn" class="btn btn-gray"><i data-lucide="x"></i> Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="issuesList" class="space-y-4"></div>
+  </div>
+</div>
+
+<div id="issueModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h4 id="modalTitle" class="mb-3"></h4>
+    <p id="modalDesc" class="mb-2"></p>
+    <p id="modalLoc" class="text-sm text-gray-500 mb-2"></p>
+    <p>Status: <span id="modalStatus" class="font-semibold"></span></p>
+    <p>Estimated Fix Date: <span id="modalDate"></span></p>
+    <p>Estimated Cost: <span id="modalCost"></span></p>
+  </div>
+</div>
+
+<script>
+let issues = [
+  {id:1,type:'Pothole',description:'Large pothole on Main Street causing traffic issues',location:'Main Street & 5th Avenue',status:'in-progress',votes:23,timestamp:'2 hours ago',estimateDate:'2025-09-20',estimateCost:'$500'},
+  {id:2,type:'Streetlight',description:'Broken streetlight in residential area',location:'Oak Park Drive',status:'resolved',votes:15,timestamp:'1 day ago',estimateDate:'2025-09-10',estimateCost:'$200'},
+  {id:3,type:'Waste Management',description:'Overflowing garbage bin near school',location:'Central Elementary School',status:'pending',votes:8,timestamp:'3 hours ago',estimateDate:'2025-09-18',estimateCost:'$100'}
+];
+
+const reportBtn = document.getElementById('reportBtn');
+const reportForm = document.getElementById('reportForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const newIssueForm = document.getElementById('newIssueForm');
+const issuesList = document.getElementById('issuesList');
+
+const modal = document.getElementById('issueModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalLoc = document.getElementById('modalLoc');
+const modalStatus = document.getElementById('modalStatus');
+const modalDate = document.getElementById('modalDate');
+const modalCost = document.getElementById('modalCost');
+
+function getStatusIcon(status){
+  switch(status){
+    case 'pending': return '<i data-lucide="clock" class="text-yellow-500 w-4 h-4"></i>';
+    case 'in-progress': return '<i data-lucide="alert-triangle" class="text-blue-500 w-4 h-4"></i>';
+    case 'resolved': return '<i data-lucide="check-circle" class="text-green-500 w-4 h-4"></i>';
+  }
+}
+
+function getStatusColor(status){
+  switch(status){
+    case 'pending': return 'bg-yellow-100 text-yellow-800';
+    case 'in-progress': return 'bg-blue-100 text-blue-800';
+    case 'resolved': return 'bg-green-100 text-green-800';
+  }
+}
+
+function renderIssues(){
+  issuesList.innerHTML = '';
+  issues.forEach(issue=>{
+    const div = document.createElement('div');
+    div.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md';
+    div.innerHTML = `
+      <div class="flex justify-between items-start mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="font-semibold text-gray-900">${issue.type}</span>
+          ${getStatusIcon(issue.status)}
+          <span class="px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(issue.status)}">
+            ${issue.status.replace('-',' ')}
+          </span>
+        </div>
+        <span class="text-sm text-gray-500">${issue.timestamp}</span>
+      </div>
+      <p class="text-gray-700 mb-2">${issue.description}</p>
+      <p class="text-sm text-gray-500 mb-3"><i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${issue.location}</p>
+      <div class="flex justify-between items-center">
+        <button class="btn-vote flex items-center gap-1" onclick="vote(${issue.id})">
+          👍 ${issue.votes} votes
+        </button>
+        <button class="btn-detail" onclick="viewDetails(${issue.id})">View Details</button>
+      </div>
+    `;
+    issuesList.appendChild(div);
+  });
+  lucide.createIcons();
+}
+
+function vote(id){
+  issues = issues.map(i => i.id===id ? {...i,votes:i.votes+1} : i);
+  renderIssues();
+}
+
+function viewDetails(id){
+  const issue = issues.find(i=>i.id===id);
+  if(issue){
+    modalTitle.textContent = issue.type;
+    modalDesc.textContent = issue.description;
+    modalLoc.textContent = issue.location;
+    modalStatus.textContent = issue.status.replace('-',' ');
+    modalDate.textContent = issue.estimateDate;
+    modalCost.textContent = issue.estimateCost;
+    modal.style.display = 'flex';
+  }
+}
+
+function closeModal(){
+  modal.style.display = 'none';
+}
+
+reportBtn.addEventListener('click', ()=>reportForm.style.display='block');
+cancelBtn.addEventListener('click', ()=>reportForm.style.display='none');
+
+newIssueForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  const type = document.getElementById('issueType').value;
+  const desc = document.getElementById('issueDesc').value;
+  const loc = document.getElementById('issueLoc').value;
+  if(type && desc && loc){
+    const issue = {id:Date.now(),type,description:desc,location:loc,status:'pending',votes:1,timestamp:'Just now',estimateDate:'TBD',estimateCost:'TBD'};
+    issues.unshift(issue);
+    renderIssues();
+    newIssueForm.reset();
+    reportForm.style.display='none';
+  }
+});
+
+renderIssues();
+lucide.createIcons();
+</script>
+</body>
+</html>
