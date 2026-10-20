@@ -1,13 +1,12 @@
-# 🚗 ThunderShine - Premium Car Wash & Auto Detailing Platform
+# 🏙️ NeighbourNet (NebourNet)
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![Bootstrap 4](https://img.shields.io/badge/Bootstrap_4-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
-[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Lucide Icons](https://img.shields.io/badge/Icons-Lucide-F43F5E?style=for-the-badge&logo=feather&logoColor=white)](https://lucide.dev/)
+[![Smart City](https://img.shields.io/badge/Domain-Smart_City_%26_Civic_Tech-10B981?style=for-the-badge)](https://en.wikipedia.org/wiki/Smart_city)
 
-> **A responsive, modern web application for car wash bookings, auto detailing services, service point locator, and customer appointment management.**
+> **A next-generation smart city and neighborhood engagement platform connecting citizens, community events, public opinion polls, civic issue reporting, and sustainability metrics.**
 
 ---
 
@@ -15,93 +14,64 @@
 
 - [Overview](#-overview)
 - [Key Features](#-key-features)
-- [Pages Included](#-pages-included)
+- [System Architecture](#-system-architecture)
+- [Pages & Directory Reference](#-pages--directory-reference)
 - [Tech Stack](#-tech-stack)
-- [Folder Structure](#-folder-structure)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation & Local Setup](#installation--local-setup)
-  - [Database Configuration](#database-configuration)
-- [Backend Booking Workflow](#-backend-booking-workflow)
-- [Contributing](#-contributing)
-- [License & Author](#-license--author)
+- [Quick Start Guide](#-quick-start-guide)
+- [Author](#-author)
+- [License](#-license)
 
 ---
 
 ## 📖 Overview
 
-**ThunderShine** is an end-to-end car care and auto detailing website designed to help car owners easily explore cleaning packages, discover washing points, read maintenance tips, and schedule online washing appointments. 
-
-It includes a complete front-end user experience styled with **Bootstrap 4** and **Barlow typography**, alongside a **PHP & MySQL** backend handling appointment reservations and vehicle information.
+**NeighbourNet** is a modern civic-tech web portal that empowers urban residents and local communities. It provides intuitive tools for viewing live urban health data, exploring an interactive infrastructure map, participating in public opinion polls, reporting neighborhood issues, tracking green sustainability goals, and discovering local community events.
 
 ---
 
 ## ✨ Key Features
 
-- **Responsive Landing Page:** Engaging hero sliders, opening hours, quick contact links, and interactive counters.
-- **Service Catalog:** Detailed breakdown of services including:
-  - Exterior Cleaning & Paint Protection
-  - Interior Vacuuming & Deep Cleaning
-  - Seats Washing & Leather Conditioning
-  - Wet & Dry Cleaning
-  - Window & Windshield Wiping
-- **Transparent Pricing Tiers:** Tiered packages (Basic, Standard, Premium) showing included features and pricing.
-- **Online Appointment Booking:** Easy appointment booking form capturing customer details, contact numbers, vehicle plate numbers, and preferred service dates.
-- **Washing Point Locator:** Visual map and address listings to guide customers to the nearest branch.
-- **Team Showcase:** Dedicated technician profiles showcasing experience and specializations.
-- **Auto Care Blog:** Articles and tutorials on car maintenance, detailing advice, and paint preservation.
-- **Contact & Feedback:** Interactive contact form and direct telephone assistance.
+### 🗺️ Interactive Smart City Map (`Smartcity.html`)
+- **Visual Infrastructure Mapping:** Live map with color-coded pins for traffic, energy, community facilities, safety, and green spaces.
+- **Point of Interest (POI) Details:** Clickable marker panels showing operational status, live metrics, and quick action links.
+- **Dynamic Filter Pills:** Filter map markers by category in real time.
+
+### 📊 City Health Dashboard (`city dashboard.html`)
+- **Key Urban Metrics:** Real-time metrics for Air Quality Index (AQI), power grid efficiency, transit mobility, and waste management.
+- **Alerts & Advisories:** Weather alerts, city notices, and municipal emergency broadcasts.
+
+### 🗳️ Citizen Public Polling (`Public Polls.html`)
+- **Democratic Community Votes:** Vote on neighborhood improvements (e.g., bike paths, park renovations, community hours).
+- **Instant Calculations:** Real-time visual progress bars displaying updated vote counts and percentages.
+- **Discussion Feed:** Public comment section under each poll for community discussion.
+
+### 🚧 Community Issue & Traffic Tracker (`trafic.html`)
+- **Incident Reporting:** Report local issues such as potholes, traffic snarls, broken street lights, and road hazards.
+- **Resolution Tracking:** Follow issues across their lifecycle (`Reported` ➔ `In Progress` ➔ `Resolved`).
+
+### 🌿 Sustainability & Eco Tracker (`envi.html`)
+- **Green City Goals:** Neighborhood carbon emission stats, tree planting campaigns, recycling metrics, and renewable energy usage.
+
+### 🤝 Community Bulletin & Volunteer Board (`community.html`)
+- **Local Events & Drives:** Discover community cleanups, gardening days, charity marathons, and food distribution events.
+- **Event Filtering & RSVP:** Filter activities by category with participant counters.
+
+### 📱 Citizen Onboarding & Mobile Guide (`Mobile Guide.html`, `journy.html`)
+- Step-by-step visual onboarding guides for mobile and web accessibility.
+
+### 🔐 Authentication Portal (`Signin.html`, `signup.html`, `registration.html`)
+- Resident sign-in, account creation, and user profile management.
 
 ---
 
-## 📄 Pages Included
+## 🏗️ System Architecture
 
-| Page | Description |
-|---|---|
-| [`index.html`](index.html) | Home page with hero slider, featured services, facts, pricing, and client reviews |
-| [`about.html`](about.html) | Company history, mission, modern equipment overview, and company video tour |
-| [`service.html`](service.html) | Complete list of auto detailing and car wash services |
-| [`price.html`](price.html) | Detailed pricing tables and service package plans |
-| [`booking.html`](booking.html) / [`index1.html`](index1.html) | Online appointment booking forms for customers |
-| [`location.html`](location.html) | Service center points, maps, and operating locations |
-| [`team.html`](team.html) | Staff and technician directory |
-| [`blog.html`](blog.html) & [`single.html`](single.html) | Blog archive and individual article post pages |
-| [`contact.html`](contact.html) | Contact form, phone inquiries, and working hours |
-| [`index1.php`](index1.php) | Backend PHP script to process and record appointments into MySQL |
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend:**
-  - Semantic HTML5 & Modern CSS3
-  - [Bootstrap 4.4.1](https://getbootstrap.com/) (Responsive Grid & UI Components)
-  - JavaScript & jQuery (DOM manipulations and animations)
-  - [Owl Carousel](https://owlcarousel2.github.io/OwlCarousel2/) (Interactive carousels & sliders)
-  - [Font Awesome 5](https://fontawesome.com/) & Flaticon (Vector icons)
-  - [Google Fonts](https://fonts.google.com/) (Barlow font family)
-- **Backend & Database:**
-  - [PHP](https://www.php.net/) (Form processing & server requests)
-  - [MySQL](https://www.mysql.com/) (Relational database storage for appointments)
-
----
-
-## 📂 Folder Structure
-
-```text
-Car-Wash-web-page/
-├── about.html          # About ThunderShine & facilities
-├── blog.html           # Car care blog & articles
-├── booking.html        # Booking page
-├── contact.html        # Contact details & inquiry form
-├── index.html          # Main website homepage
-├── index1.html         # Appointment submission form interface
-├── index1.php          # Backend PHP script for database connection & storage
-├── location.html       # Washing branch points & locator
-├── price.html          # Service pricing packages
-├── service.html        # Service catalog
-├── single.html         # Single blog post view
-├── team.html           # Professional technicians & staff
-├── style1.css          # Form styling sheet
-├── bg.jpg              # High-resolution hero background
-└── README.md           # Project documentation
+```mermaid
+graph TD
+    User([Citizen / Resident]) --> Portal[NeighbourNet Web Portal]
+    Portal --> Map[Interactive Smart City Map]
+    Portal --> Dash[City Health Dashboard]
+    Portal --> Polls[Public Opinion Polling]
+    Portal --> Issues[Community Issue Tracker]
+    Portal --> Eco[Sustainability & Eco Tracker]
+    Portal --> Comm[Community Events Board]
